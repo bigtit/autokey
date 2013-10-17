@@ -20,3 +20,5 @@
 *.ncb
 *.htm
 *.html
+*.ini
+*.suo
