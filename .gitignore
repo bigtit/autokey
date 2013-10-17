@@ -9,7 +9,6 @@
 
 # Fixed
 .gitignore
-*.exe
 *.dsp
 *.lib
 *.dbg
