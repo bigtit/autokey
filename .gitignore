@@ -1,0 +1,8 @@
+# Compiled Object files
+*.pdb
+*.exp
+*.manifest
+*.obj
+*.idb
+*.dep
+*.htm
