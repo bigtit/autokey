@@ -6,6 +6,9 @@
 *.idb
 *.dep
 *.htm
+*.res
+/Debug
+/Release
 
 # Fixed
 .gitignore
