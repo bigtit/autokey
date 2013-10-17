@@ -6,3 +6,23 @@
 *.idb
 *.dep
 *.htm
+/Debug
+/Release
+
+# Fixed
+.gitignore
+*.exe
+*.txt
+*.def
+*.dsp
+*.lib
+*.doc
+*.dll
+*.lnt
+*.pm
+*.xls
+*.dbg
+*.DBG
+*.o
+*.plg
+*.keep
