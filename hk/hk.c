@@ -27,17 +27,17 @@ LRESULT CALLBACK tproc(HWND, UINT, UINT, DWORD);
 
 BOOL APIENTRY DllMain(HINSTANCE hDll, DWORD dwReason, LPVOID lpReserved)
 {
-	switch(dwReason){
+  switch(dwReason){
     case DLL_PROCESS_ATTACH:
       inst = hDll;
       DisableThreadLibraryCalls(inst);
       break;
     case DLL_PROCESS_DETACH:
       break;
-		case DLL_THREAD_ATTACH: break;
-		case DLL_THREAD_DETACH: break;
-	}
-	return TRUE;
+    case DLL_THREAD_ATTACH: break;
+    case DLL_THREAD_DETACH: break;
+  }
+  return TRUE;
 }
 BOOL WINAPI __stdcall SetDlg(HWND hdlg)
 {
