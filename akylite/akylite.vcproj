@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="hk"
-	ProjectGUID="{AC144C27-4E76-4092-A502-554C61677B6F}"
-	RootNamespace="hkdll"
+	Name="akylite"
+	ProjectGUID="{2ED3AD45-FB83-4AD0-A204-340A62C68778}"
+	RootNamespace="akylite"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -86,7 +86,7 @@
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="2"
+			ConfigurationType="1"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
@@ -125,7 +125,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				ModuleDefinitionFile="hk.def"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -163,11 +162,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\hk.c"
+				RelativePath=".\akylite.c"
 				>
 			</File>
 			<File
-				RelativePath=".\hk.def"
+				RelativePath=".\akylite.rc"
 				>
 			</File>
 		</Filter>
@@ -176,6 +175,14 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\resource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\vk.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"

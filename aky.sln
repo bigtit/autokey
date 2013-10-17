@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual C++ Express 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aky", "aky\aky.vcproj", "{FE0229D9-86B1-4E90-ADC6-7CE612EF9359}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hkdll", "hk\hk.vcproj", "{AC144C27-4E76-4092-A502-554C61677B6F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hk", "hk\hk.vcproj", "{AC144C27-4E76-4092-A502-554C61677B6F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "akylite", "akylite\akylite.vcproj", "{2ED3AD45-FB83-4AD0-A204-340A62C68778}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,6 +21,10 @@ Global
 		{AC144C27-4E76-4092-A502-554C61677B6F}.Debug|Win32.Build.0 = Debug|Win32
 		{AC144C27-4E76-4092-A502-554C61677B6F}.Release|Win32.ActiveCfg = Release|Win32
 		{AC144C27-4E76-4092-A502-554C61677B6F}.Release|Win32.Build.0 = Release|Win32
+		{2ED3AD45-FB83-4AD0-A204-340A62C68778}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2ED3AD45-FB83-4AD0-A204-340A62C68778}.Debug|Win32.Build.0 = Debug|Win32
+		{2ED3AD45-FB83-4AD0-A204-340A62C68778}.Release|Win32.ActiveCfg = Release|Win32
+		{2ED3AD45-FB83-4AD0-A204-340A62C68778}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
