@@ -93,6 +93,8 @@ LRESULT CALLBACK llkproc(int code, WPARAM wp, LPARAM lp)
   // no problem with on/off mode(mode 1)
   if(md==1 && kup && ks->vkCode==sk){
     if(!ton){
+      keybd_event(ky, 0, 0, 0);
+      keybd_event(ky, 0, KEYEVENTF_KEYUP, 0);
       tid = SetTimer(0, 0, itv, tproc);
       SendMessage(dlg, WM_ONOFF, 1, 0);
       ton = 1;
