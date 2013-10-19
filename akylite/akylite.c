@@ -53,7 +53,7 @@ int APIENTRY WinMain(HINSTANCE hinst, HINSTANCE phinst, LPSTR lpcmdline, int icm
   // load dll and func
   module = LoadLibrary(TEXT("hk.dll"));
   if(!module){
-    MessageBox(0, "ÎÞ·¨ÔØÈëhk.dll", "´íÎó", 0);
+    MessageBox(0, "ï¿½Þ·ï¿½ï¿½ï¿½ï¿½ï¿½hk.dll", "ï¿½ï¿½ï¿½ï¿½", 0);
     return -1;
   }
   SetHook = (BOOL (__stdcall *)(int, int, char))GetProcAddress(module, "SetHook");
@@ -61,7 +61,7 @@ int APIENTRY WinMain(HINSTANCE hinst, HINSTANCE phinst, LPSTR lpcmdline, int icm
   SetSkey = (BOOL (__stdcall *)(char))GetProcAddress(module, "SetSkey");
 
   if(!SetHook || !SetDlg || !SetSkey){
-    MessageBox(0, "ÔØÈëº¯Êý´íÎó", "´íÎó", 0);
+    MessageBox(0, "ï¿½ï¿½ï¿½ëº¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", "ï¿½ï¿½ï¿½ï¿½", 0);
     return -1;
   }
 
@@ -83,7 +83,7 @@ LRESULT CALLBACK DlgProc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
   char tip[100];
   const UINT WM_TASKBARCREATED = RegisterWindowMessage(TEXT("TaskbarCreated"));
   // local global
-  sprintf_s(tip, 100, "°´¼ü: %s\n¼ä¸ô: %s ms\n¿ª¹Ø: %s", key, itv, skey);
+  sprintf_s(tip, 100, "ï¿½ï¿½ï¿½ï¿½: %s\nï¿½ï¿½ï¿½ï¿½: %s ms\nï¿½ï¿½ï¿½ï¿½: %s", key, itv, skey);
 
   switch(msg){
     case WM_CREATE:
@@ -116,7 +116,7 @@ LRESULT CALLBACK DlgProc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
       // start hook directly
       if(SetHook(1, atoi(itv), vk)){
         SetSkey(vsk);
-        SetTip(tip, "ÊÖ¶¯", hdlg, &ballon);
+        SetTip(tip, "ï¿½Ö¶ï¿½", hdlg, &ballon);
       }
 
       SetActiveWindow(hdlg);
@@ -128,7 +128,7 @@ LRESULT CALLBACK DlgProc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
         SetForegroundWindow(hdlg);
         TrackPopupMenuEx(menu, TPM_CENTERALIGN, pt.x, pt.y, hdlg, 0);
       }
-	    else if(lp==WM_LBUTTONDOWN)
+      else if(lp==WM_LBUTTONDOWN)
         SendMessage(hdlg, WM_COMMAND, IDC_BUTTON2, lp);
       break;
     case WM_COMMAND:
@@ -139,18 +139,18 @@ LRESULT CALLBACK DlgProc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
         ChkPrm();
         // setting phase
         // need reboot hook
-        sprintf_s(tip, 100, "°´¼ü: %s\n¼ä¸ô: %s ms\n¿ª¹Ø: %s", key, itv, skey);
+        sprintf_s(tip, 100, "ï¿½ï¿½ï¿½ï¿½: %s\nï¿½ï¿½ï¿½ï¿½: %s ms\nï¿½ï¿½ï¿½ï¿½: %s", key, itv, skey);
         SetDlgItemText(hdlg, IDC_EDIT2, itv);
 
         SetHook(0, 0, 0);
         if(SetHook(1, atoi(itv), vk)){
           SetSkey(vsk);
-          SetTip(tip, "ÊÖ¶¯", hdlg, &ballon);
+          SetTip(tip, "ï¿½Ö¶ï¿½", hdlg, &ballon);
         }
-        else SetTip(tip, "¹Ø±Õ", hdlg, &ballon);
+        else SetTip(tip, "ï¿½Ø±ï¿½", hdlg, &ballon);
       }
       else if(wid==IDM_TRAY_EXT) SendMessage(hdlg, WM_CLOSE, wp, lp);
-      else if(wid==IDM_TRAY_ABO) SetTip("2013-9-1\nTsubasa9\nVersion: 2.1 lite", "¹ØÓÚ", hdlg, &ballon);
+      else if(wid==IDM_TRAY_ABO) SetTip("2013-9-1\nTsubasa9\nVersion: 2.1 lite", "ï¿½ï¿½ï¿½ï¿½", hdlg, &ballon);
       else if(wid==IDM_TRAY_SET || wid==IDC_BUTTON2){
         if(!IsWindowVisible(hdlg)){
           ShowWindow(hdlg, SW_SHOW);
@@ -163,8 +163,8 @@ LRESULT CALLBACK DlgProc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
       }
       break;
     case WM_ONOFF:
-      if(!wp) SetTip(tip, "ÊÖ¶¯", hdlg, &ballon);
-      else SetTip(tip, "×Ô¶¯", hdlg, &ballon);
+      if(!wp) SetTip(tip, "ï¿½Ö¶ï¿½", hdlg, &ballon);
+      else SetTip(tip, "ï¿½Ô¶ï¿½", hdlg, &ballon);
       break;
     case WM_EDITSHOW:
       if(!wp) SetDlgItemText(hdlg, IDC_EDIT1, key);
