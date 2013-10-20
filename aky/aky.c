@@ -54,14 +54,14 @@ int APIENTRY WinMain(HINSTANCE hinst, HINSTANCE phinst, LPSTR lpcmdline, int icm
   // load dll and func
   module = LoadLibrary(TEXT("hk.dll"));
   if(!module){
-    MessageBox(0, "ÎÞ·¨ÔØÈëhk.dll", "´íÎó", 0);
+    MessageBox(0, "ï¿½Þ·ï¿½ï¿½ï¿½ï¿½ï¿½hk.dll", "ï¿½ï¿½ï¿½ï¿½", 0);
     return -1;
   }
   SetHook = (BOOL (__stdcall *)(int, int, char))GetProcAddress(module, "SetHook");
   SetDlg = (BOOL (__stdcall *)(HWND))GetProcAddress(module, "SetDlg");
   SetSkey = (BOOL (__stdcall *)(char))GetProcAddress(module, "SetSkey");
   if(!SetHook || !SetDlg || !SetSkey){
-    MessageBox(0, "ÔØÈëº¯Êý´íÎó", "´íÎó", 0);
+    MessageBox(0, "ï¿½ï¿½ï¿½ëº¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", "ï¿½ï¿½ï¿½ï¿½", 0);
     return -1;
   }
 
@@ -118,12 +118,12 @@ LRESULT CALLBACK DlgProc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
           lstrcat(tip, "\n");
           lstrcat(tip, skey);
           SetSkey(vsk);
-          SetTip(tip, "¿ª¹Ø: ¹Ø±Õ", hdlg, &ballon);
+          SetTip(tip, "ï¿½ï¿½ï¿½ï¿½: ï¿½Ø±ï¿½", hdlg, &ballon);
         }
-        else if(mode==2) SetTip(tip, "°´×¡", hdlg, &ballon);
-        else SetTip(tip, "¹Ø±Õ", hdlg, &ballon);
+        else if(mode==2) SetTip(tip, "ï¿½ï¿½×¡", hdlg, &ballon);
+        else SetTip(tip, "ï¿½Ø±ï¿½", hdlg, &ballon);
       }
-      else SetTip(tip, "¹Ø±Õ", hdlg, &ballon);
+      else SetTip(tip, "ï¿½Ø±ï¿½", hdlg, &ballon);
 
       if(mode!=1) EnableWindow(GetDlgItem(hdlg, IDC_EDIT3), 0);
       // topmost
@@ -137,18 +137,18 @@ LRESULT CALLBACK DlgProc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
         SetForegroundWindow(hdlg);
         TrackPopupMenuEx(menu, TPM_CENTERALIGN, pt.x, pt.y, hdlg, 0);
       }
-	    else if(lp==WM_LBUTTONDOWN){
+      else if(lp==WM_LBUTTONDOWN){
       switch(mode){
-        case 0: SetTip(tip, "¹Ø±Õ", hdlg, &ballon); break;
+        case 0: SetTip(tip, "ï¿½Ø±ï¿½", hdlg, &ballon); break;
         case 1:
           lstrcat(tip, "\n");
           lstrcat(tip, skey);
-          SetTip(tip, "¿ª¹Ø", hdlg, &ballon);
+          SetTip(tip, "ï¿½ï¿½ï¿½ï¿½", hdlg, &ballon);
           break;
-        case 2: SetTip(tip, "°´×¡", hdlg, &ballon); break;
+        case 2: SetTip(tip, "ï¿½ï¿½×¡", hdlg, &ballon); break;
         default: break;
       }
-	    }
+      }
       break;
     case WM_COMMAND:
       wid = LOWORD(wp);
@@ -172,19 +172,19 @@ LRESULT CALLBACK DlgProc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
             lstrcat(tip, "\n");
             lstrcat(tip, skey);
             SetSkey(vsk);
-            SetTip(tip, "¿ª¹Ø", hdlg, &ballon);
+            SetTip(tip, "ï¿½ï¿½ï¿½ï¿½", hdlg, &ballon);
             EnableWindow(GetDlgItem(hdlg, IDC_EDIT3), 1);
           }
           else{
-            if(!mode) SetTip(tip, "¹Ø±Õ", hdlg, &ballon);
-            else SetTip(tip, "°´×¡", hdlg, &ballon);
+            if(!mode) SetTip(tip, "ï¿½Ø±ï¿½", hdlg, &ballon);
+            else SetTip(tip, "ï¿½ï¿½×¡", hdlg, &ballon);
             EnableWindow(GetDlgItem(hdlg, IDC_EDIT3), 0);
           }
         }
-        else SetTip(tip, "¹Ø±Õ", hdlg, &ballon);
+        else SetTip(tip, "ï¿½Ø±ï¿½", hdlg, &ballon);
       }
       else if(wid==IDM_TRAY_EXT) SendMessage(hdlg, WM_CLOSE, wp, lp);
-      else if(wid==IDM_TRAY_ABO) SetTip("2013-8-1\nTsubasa9", "¹ØÓÚ", hdlg, &ballon);
+      else if(wid==IDM_TRAY_ABO) SetTip("2013-8-1\nTsubasa9", "ï¿½ï¿½ï¿½ï¿½", hdlg, &ballon);
       else if(wid==IDM_TRAY_SET || wid==IDC_BUTTON2){
         if(!IsWindowVisible(hdlg)){
           ShowWindow(hdlg, SW_SHOW);
@@ -194,13 +194,13 @@ LRESULT CALLBACK DlgProc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
           ShowWindow(hdlg, SW_HIDE);
           CheckMenuItem(menu, IDM_TRAY_SET, MF_UNCHECKED);
           switch(mode){
-            case 0: SetTip(tip, "¹Ø±Õ", hdlg, &ballon); break;
+            case 0: SetTip(tip, "ï¿½Ø±ï¿½", hdlg, &ballon); break;
             case 1:
             lstrcat(tip, "\n");
             lstrcat(tip, skey);
-            SetTip(tip, "¿ª¹Ø", hdlg, &ballon);
+            SetTip(tip, "ï¿½ï¿½ï¿½ï¿½", hdlg, &ballon);
             break;
-            case 2: SetTip(tip, "°´×¡", hdlg, &ballon); break;
+            case 2: SetTip(tip, "ï¿½ï¿½×¡", hdlg, &ballon); break;
             default: break;
           }
         }
@@ -209,8 +209,8 @@ LRESULT CALLBACK DlgProc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
     case WM_ONOFF:
       lstrcat(tip, "\n");
       lstrcat(tip, skey);
-      if(!wp) SetTip(tip, "¿ª¹Ø:¹Ø±Õ", hdlg, &ballon);
-      else SetTip(tip, "¿ª¹Ø:¿ªÆô", hdlg, &ballon);
+      if(!wp) SetTip(tip, "ï¿½ï¿½ï¿½ï¿½:ï¿½Ø±ï¿½", hdlg, &ballon);
+      else SetTip(tip, "ï¿½ï¿½ï¿½ï¿½:ï¿½ï¿½ï¿½ï¿½", hdlg, &ballon);
       break;
     case WM_EDITSHOW:
       if(!wp) SetDlgItemText(hdlg, IDC_EDIT1, key);
