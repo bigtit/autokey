@@ -18,9 +18,9 @@ IDC_TRAY MENU
 {
     POPUP "tray"
     {
-        MENUITEM "显示", IDM_TRAY_SET, CHECKED
-        MENUITEM "关于", IDM_TRAY_ABO
-        MENUITEM "退出", IDM_TRAY_EXT
+        MENUITEM "Show", IDM_TRAY_SET, CHECKED
+        MENUITEM "About", IDM_TRAY_ABO
+        MENUITEM "Exit", IDM_TRAY_EXT
     }
 }
 
@@ -36,14 +36,14 @@ EXSTYLE WS_EX_TOPMOST
 CAPTION "AutoKey"
 FONT 8, "Ms Shell Dlg", 400, 0, 1
 {
-    LTEXT           "连发键", IDC_STATIC, 3, 5, 26, 8, SS_LEFT
+    LTEXT           "Key", IDC_STATIC, 3, 5, 26, 8, SS_LEFT
     EDITTEXT        IDC_EDIT1, 30, 3, 49, 12, ES_AUTOHSCROLL, WS_EX_RIGHT
-    LTEXT           "间隔ms", IDC_STATIC2, 3, 20, 26, 8, SS_LEFT
+    LTEXT           "Intv/ms", IDC_STATIC2, 3, 20, 26, 8, SS_LEFT
     EDITTEXT        IDC_EDIT2, 30, 18, 49, 12, ES_AUTOHSCROLL | ES_NUMBER, WS_EX_RIGHT
-    PUSHBUTTON      "设置", IDC_BUTTON1, 86, 3, 43, 43
-    PUSHBUTTON      "隐藏", IDC_BUTTON2, 133, 3, 43, 43
+    PUSHBUTTON      "Set", IDC_BUTTON1, 86, 3, 43, 43
+    PUSHBUTTON      "Hide", IDC_BUTTON2, 133, 3, 43, 43
     EDITTEXT        IDC_EDIT3, 30, 33, 49, 12, ES_AUTOHSCROLL, WS_EX_RIGHT
-    LTEXT           "开关键", IDC_STATIC, 3, 35, 27, 8, SS_LEFT
+    LTEXT           "SKey", IDC_STATIC, 3, 35, 27, 8, SS_LEFT
 }
 
 
