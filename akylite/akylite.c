@@ -53,7 +53,7 @@ int APIENTRY WinMain(HINSTANCE hinst, HINSTANCE phinst, LPSTR lpcmdline, int icm
   // load dll and func
   module = LoadLibrary(TEXT("hk.dll"));
   if(!module){
-    MessageBox(0, "�޷�����hk.dll", "����", 0);
+    MessageBox(0, "Could not load hk.dll", "Error", 0);
     return -1;
   }
   SetHook = (BOOL (__stdcall *)(int, int, char))GetProcAddress(module, "SetHook");
@@ -61,7 +61,7 @@ int APIENTRY WinMain(HINSTANCE hinst, HINSTANCE phinst, LPSTR lpcmdline, int icm
   SetSkey = (BOOL (__stdcall *)(char))GetProcAddress(module, "SetSkey");
 
   if(!SetHook || !SetDlg || !SetSkey){
-    MessageBox(0, "���뺯������", "����", 0);
+    MessageBox(0, "Could not load funcs", "Error",;
     return -1;
   }
 
@@ -83,7 +83,7 @@ LRESULT CALLBACK DlgProc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
   char tip[100];
   const UINT WM_TASKBARCREATED = RegisterWindowMessage(TEXT("TaskbarCreated"));
   // local global
-  sprintf_s(tip, 100, "����: %s\n����: %s ms\n����: %s", key, itv, skey);
+  sprintf_s(tip, 100, "Key: %s\nInterval: %s ms\nSKey: %s", key, itv, skey);
 
   switch(msg){
     case WM_CREATE:
@@ -116,7 +116,7 @@ LRESULT CALLBACK DlgProc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
       // start hook directly
       if(SetHook(1, atoi(itv), vk)){
         SetSkey(vsk);
-        SetTip(tip, "�ֶ�", hdlg, &ballon);
+        SetTip(tip, "Off", hdlg, &ballon);
       }
 
       SetActiveWindow(hdlg);
@@ -139,18 +139,18 @@ LRESULT CALLBACK DlgProc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
         ChkPrm();
         // setting phase
         // need reboot hook
-        sprintf_s(tip, 100, "����: %s\n����: %s ms\n����: %s", key, itv, skey);
+        sprintf_s(tip, 100, "Key: %s\nInterval: %s ms\nSKey: %s", key, itv, skey);
         SetDlgItemText(hdlg, IDC_EDIT2, itv);
 
         SetHook(0, 0, 0);
         if(SetHook(1, atoi(itv), vk)){
           SetSkey(vsk);
-          SetTip(tip, "�ֶ�", hdlg, &ballon);
+          SetTip(tip, "Off", hdlg, &ballon);
         }
-        else SetTip(tip, "�ر�", hdlg, &ballon);
+        else SetTip(tip, "On", hdlg, &ballon);
       }
       else if(wid==IDM_TRAY_EXT) SendMessage(hdlg, WM_CLOSE, wp, lp);
-      else if(wid==IDM_TRAY_ABO) SetTip("2013-9-1\nTsubasa9\nVersion: 2.1 lite", "����", hdlg, &ballon);
+      else if(wid==IDM_TRAY_ABO) SetTip("2013-9-1\nTsubasa9\nVersion: 2.1 lite", "About", hdlg, &ballon);
       else if(wid==IDM_TRAY_SET || wid==IDC_BUTTON2){
         if(!IsWindowVisible(hdlg)){
           ShowWindow(hdlg, SW_SHOW);
@@ -163,8 +163,8 @@ LRESULT CALLBACK DlgProc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
       }
       break;
     case WM_ONOFF:
-      if(!wp) SetTip(tip, "�ֶ�", hdlg, &ballon);
-      else SetTip(tip, "�Զ�", hdlg, &ballon);
+      if(!wp) SetTip(tip, "Off", hdlg, &ballon);
+      else SetTip(tip, "On", hdlg, &ballon);
       break;
     case WM_EDITSHOW:
       if(!wp) SetDlgItemText(hdlg, IDC_EDIT1, key);
