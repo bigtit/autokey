@@ -57,7 +57,7 @@ BOOL WINAPI __stdcall SetHook(int mode, int iterval, char key)
   BOOL ok;
   itv = iterval;
   ky = key;
-	md = mode;
+  md = mode;
 
   // timer should be off
   ton = 0;
