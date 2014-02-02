@@ -61,7 +61,7 @@ int APIENTRY WinMain(HINSTANCE hinst, HINSTANCE phinst, LPSTR lpcmdline, int icm
   SetSkey = (BOOL (__stdcall *)(char))GetProcAddress(module, "SetSkey");
 
   if(!SetHook || !SetDlg || !SetSkey){
-    MessageBox(0, "Could not load funcs", "Error",;
+    MessageBox(0, "Could not load funcs", "Error", 0);
     return -1;
   }
 
