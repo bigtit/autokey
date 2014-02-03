@@ -27,7 +27,7 @@ LRESULT CALLBACK tproc(HWND, UINT, UINT, DWORD);
 
 BOOL APIENTRY DllMain(HINSTANCE hDll, DWORD dwReason, LPVOID lpReserved)
 {
-	switch(dwReason){
+  switch(dwReason){
     case DLL_PROCESS_ATTACH:
       inst = hDll;
       DisableThreadLibraryCalls(inst);
