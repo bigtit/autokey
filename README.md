@@ -2,11 +2,15 @@ A simple auto keying tool
 ----------------------------------------------------
 for online games such as wow, jx3 on win platform.
 
-##### Aky:
+##### Aky (deprecated):
 Full function version with two independent modes.
 
 ##### Akylite:
 Lite version with only one mode mixed from two modes in Aky.
+
+Holding mode for normal situation.
+
+Skey for auto pressing & holding switching.
 
 ######Coding notes:
 
