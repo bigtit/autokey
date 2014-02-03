@@ -1,4 +1,4 @@
-A simple and lite auto keying tool
+A simple auto keying tool
 ----------------------------------------------------
 for online games such as wow, jx3 on win platform.
 
