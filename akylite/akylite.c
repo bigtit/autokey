@@ -116,7 +116,7 @@ LRESULT CALLBACK DlgProc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
       // start hook directly
       if(SetHook(1, atoi(itv), vk)){
         SetSkey(vsk);
-        SetTip(tip, "Off", hdlg, &ballon);
+        SetTip(tip, "Manual", hdlg, &ballon);
       }
 
       SetActiveWindow(hdlg);
@@ -145,9 +145,9 @@ LRESULT CALLBACK DlgProc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
         SetHook(0, 0, 0);
         if(SetHook(1, atoi(itv), vk)){
           SetSkey(vsk);
-          SetTip(tip, "Off", hdlg, &ballon);
+          SetTip(tip, "Manual", hdlg, &ballon);
         }
-        else SetTip(tip, "On", hdlg, &ballon);
+        else SetTip(tip, "Auto", hdlg, &ballon);
       }
       else if(wid==IDM_TRAY_EXT) SendMessage(hdlg, WM_CLOSE, wp, lp);
       else if(wid==IDM_TRAY_ABO) SetTip("2013-9-1\nTsubasa9\nVersion: 2.1 lite", "About", hdlg, &ballon);
@@ -163,8 +163,8 @@ LRESULT CALLBACK DlgProc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
       }
       break;
     case WM_ONOFF:
-      if(!wp) SetTip(tip, "Off", hdlg, &ballon);
-      else SetTip(tip, "On", hdlg, &ballon);
+      if(!wp) SetTip(tip, "Manual", hdlg, &ballon);
+      else SetTip(tip, "Auto", hdlg, &ballon);
       break;
     case WM_EDITSHOW:
       if(!wp) SetDlgItemText(hdlg, IDC_EDIT1, key);
