@@ -109,6 +109,7 @@ LRESULT CALLBACK llkproc(int code, WPARAM wp, LPARAM lp)
   }
   else if(md==1 && ks->scanCode==MapVirtualKey(ky, MAPVK_VK_TO_VSC)){
     if(!ton && kdn){
+      SendMessage(dlg, WM_ONOFF, 0, 0);
       keybd_event(ky, 0, 0, 0);
       keybd_event(ky, 0, KEYEVENTF_KEYUP, 0);
       tid = SetTimer(0, 0, itv, tproc);
