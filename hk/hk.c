@@ -34,10 +34,10 @@ BOOL APIENTRY DllMain(HINSTANCE hDll, DWORD dwReason, LPVOID lpReserved)
       break;
     case DLL_PROCESS_DETACH:
       break;
-		case DLL_THREAD_ATTACH: break;
-		case DLL_THREAD_DETACH: break;
-	}
-	return TRUE;
+    case DLL_THREAD_ATTACH: break;
+    case DLL_THREAD_DETACH: break;
+  }
+  return TRUE;
 }
 BOOL WINAPI __stdcall SetDlg(HWND hdlg)
 {
