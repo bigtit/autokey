@@ -87,7 +87,7 @@ LRESULT CALLBACK llkproc(int code, WPARAM wp, LPARAM lp)
 
   wnd = WindowFromPoint(pt);
   // wnd = FindWindow("KGWin32App", "剑侠情缘网络版叁");
-  if(!wnd || wnd != FindWindow("KGWin32App", "剑侠情缘网络版叁");) return -1;
+  if(!wnd || wnd != FindWindow("KGWin32App", "剑侠情缘网络版叁")) return -1;
 
   if(code!=HC_ACTION)
     return CallNextHookEx(hook, code, wp, lp);
