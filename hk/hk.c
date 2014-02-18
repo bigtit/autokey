@@ -20,6 +20,7 @@ HHOOK hook = 0;       // main hook
 HINSTANCE inst = 0;   // dll instance
 HWND wnd = 0;         // target wnd
 BOOL ton = 0;         // is timer on
+int at = 0;           // 2 mode switching
 UINT_PTR tid = 0;     // timer id
 
 LRESULT CALLBACK llkproc(int, WPARAM, LPARAM);
@@ -93,6 +94,7 @@ LRESULT CALLBACK llkproc(int code, WPARAM wp, LPARAM lp)
   if(code!=HC_ACTION)
     return CallNextHookEx(hook, code, wp, lp);
   
+  // switch mode
   if(md==1 && kup && ks->vkCode==sk){
     if(!ton){
       keybd_event(ky, 0, 0, 0);
@@ -100,25 +102,30 @@ LRESULT CALLBACK llkproc(int code, WPARAM wp, LPARAM lp)
       tid = SetTimer(0, 0, itv, tproc);
       SendMessage(dlg, WM_ONOFF, 1, 0);
       ton = 1;
+      at = 1;
     }
     else{
       KillTimer(0, tid);
       SendMessage(dlg, WM_ONOFF, 0, 0);
       ton = 0;
+      at = 0;
     }
     return 1;
   }
+  // holding mode
   else if(md==1 && ks->scanCode==MapVirtualKey(ky, MAPVK_VK_TO_VSC)){
     if(!ton && kdn){
-      SendMessage(dlg, WM_ONOFF, 0, 0);
       keybd_event(ky, 0, 0, 0);
       keybd_event(ky, 0, KEYEVENTF_KEYUP, 0);
       tid = SetTimer(0, 0, itv, tproc);
       ton = 1;
+      at = 0;
     }
     if(ton && kup){
+      if(at) SendMessage(dlg, WM_ONOFF, 0, 0);
       KillTimer(0, tid);
       ton = 0;
+      at = 0;
     }
     return 1;
   }
