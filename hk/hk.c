@@ -18,7 +18,7 @@ HWND dlg = 0;         // save dlg handler
 // no shared
 HHOOK hook = 0;       // main hook
 HINSTANCE inst = 0;   // dll instance
-// HWND wnd = 0;         // target wnd
+HWND wnd = 0;         // target wnd
 BOOL ton = 0;         // is timer on
 UINT_PTR tid = 0;     // timer id
 
@@ -85,9 +85,9 @@ LRESULT CALLBACK llkproc(int code, WPARAM wp, LPARAM lp)
   BOOL kdn = WM_KEYDOWN==wp || WM_SYSKEYDOWN==wp;
   GetCursorPos(&pt);
 
-  // wnd = WindowFromPoint(pt);
+  wnd = WindowFromPoint(pt);
   // wnd = FindWindow("KGWin32App", "剑侠情缘网络版叁");
-  // if(!wnd) return -1;
+  if(!wnd || wnd != FindWindow("KGWin32App", "剑侠情缘网络版叁");) return -1;
 
   if(code!=HC_ACTION)
     return CallNextHookEx(hook, code, wp, lp);
