@@ -129,7 +129,7 @@ LRESULT CALLBACK llkproc(int code, WPARAM wp, LPARAM lp)
       at = 0;
     }
     if(ton && kup){
-      //SendMessage(dlg, WM_ONOFF, 0, 0);
+      if(at) SendMessage(dlg, WM_ONOFF, 0, 0);
       KillTimer(0, tid);
       ton = 0;
       at = 0;
