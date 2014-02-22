@@ -122,6 +122,7 @@ LRESULT CALLBACK llkproc(int code, WPARAM wp, LPARAM lp)
   // holding mode
   else if(md==1 && ks->scanCode==MapVirtualKey(ky, MAPVK_VK_TO_VSC)){
     if(!ton && kdn){
+      if(at) SendMessage(dlg, WM_ONOFF, 0, 0);
       keybd_event(ky, 0, 0, 0);
       keybd_event(ky, 0, KEYEVENTF_KEYUP, 0);
       tid = SetTimer(0, 0, itv, tproc);
@@ -129,7 +130,6 @@ LRESULT CALLBACK llkproc(int code, WPARAM wp, LPARAM lp)
       at = 0;
     }
     if(ton && kup){
-      if(at) SendMessage(dlg, WM_ONOFF, 0, 0);
       KillTimer(0, tid);
       ton = 0;
       at = 0;
