@@ -1,5 +1,5 @@
 // hk.c
-// 3.1 version
+// 3.5 version
 // use low level keybd hook
 // to avoid keybd_event confusion with keybd hook
 #include <windows.h>
@@ -86,10 +86,17 @@ LRESULT CALLBACK llkproc(int code, WPARAM wp, LPARAM lp)
   BOOL kdn = WM_KEYDOWN==wp || WM_SYSKEYDOWN==wp;
   GetCursorPos(&pt);
 
+  // the case of swithing window when timer is on
   wnd = WindowFromPoint(pt);
-  // wnd = FindWindow("KGWin32App", "剑侠情缘网络版叁");
-  if(!wnd || wnd != FindWindow("KGWin32App", "剑侠情缘网络版叁"))
+  if(!wnd || wnd != FindWindow("KGWin32App", "剑侠情缘网络版叁")){
+    if(ton){
+      KillTimer(0, tid);
+      // SendMessage(dlg, WM_ONOFF, 0, 0);
+      ton = 0;
+      at = 0;
+    }
     return CallNextHookEx(hook, code, wp, lp);
+  }
 
   if(code!=HC_ACTION)
     return CallNextHookEx(hook, code, wp, lp);
@@ -122,7 +129,7 @@ LRESULT CALLBACK llkproc(int code, WPARAM wp, LPARAM lp)
       at = 0;
     }
     if(ton && kup){
-      if(at) SendMessage(dlg, WM_ONOFF, 0, 0);
+      //SendMessage(dlg, WM_ONOFF, 0, 0);
       KillTimer(0, tid);
       ton = 0;
       at = 0;
