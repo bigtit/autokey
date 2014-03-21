@@ -14,3 +14,6 @@
 #define IDC_EDIT2                               1002
 #define IDC_EDIT3                               1003
 #define IDC_BUTTON1                             1004
+#define IDC_WLIST                               1005
+#define IDC_INFOTX                              1006
+#define IDC_LOCK                                40000
