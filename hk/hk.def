@@ -3,6 +3,7 @@ LIBRARY hk
 EXPORTS
 	SetHook
 	SetDlg
+	SetTgt
 	SetSkey
 SECTIONS
 	hookdata READ WRITE SHARED
