@@ -1,6 +1,8 @@
 #include <windows.h>
 #include <commctrl.h>
 #include <stdio.h>
+#include <assert.h>
+#include <tchar.h>
 
 #include "vk.h"
 #include "resource.h"
@@ -8,6 +10,9 @@
 #define WM_TRAY WM_USER+1
 #define WM_ONOFF WM_USER+2
 #define WM_EDITSHOW WM_USER+3
+
+#define MAX_PN 1024
+#define MY_TIMER 8001
 
 HINSTANCE inst;
 HWND dlg;
@@ -21,6 +26,14 @@ int vk = 0;
 char key[20] = "R"; // for display
 int vsk = 0;
 char skey[20] = "F12"; // for display
+
+// for listbox
+HWND hlist;
+// for number of window handles
+HWND wins[MAX_PN];
+int ws = 0;
+int wc = 0;
+HWND tgt = 0;
 
 // custom proc func
 LRESULT CALLBACK DlgProc(HWND, UINT, WPARAM, LPARAM);
@@ -41,7 +54,42 @@ BOOL SetTip(char*, char*, HWND, PNOTIFYICONDATA);
 HMODULE module;
 BOOL (__stdcall *SetHook)(int, int, char);
 BOOL (__stdcall *SetDlg)(HWND);
+BOOL (__stdcall *SetTgt)(HWND);
 BOOL (__stdcall *SetSkey)(char);
+
+// proc func for EnumWindows
+BOOL CALLBACK ewproc(HWND hwnd,LPARAM lp)
+{
+  TCHAR name[256] = {0};
+  TCHAR str[256] = {0};
+  GetWindowText(hwnd, name, sizeof(name));
+  if(name[0]){
+    wins[ws++] = hwnd;
+    _stprintf(str, _T("%s "), name);
+    SendMessage(hlist, LB_ADDSTRING, 0, (LPARAM)str);
+  }
+  return TRUE;
+}
+// counting func for EnumWindows
+BOOL CALLBACK ewproc2(HWND hwnd,LPARAM lp)
+{
+  TCHAR name[256] = {0};
+  GetWindowText(hwnd, name, sizeof(name));
+  if(name[0]) ++wc;
+  return TRUE;
+}
+
+// get the latest win list
+void reflist()
+{
+  wc = 0;
+  EnumWindows(ewproc2, 0);
+  if(wc!=ws){
+    ws = 0;
+    SendMessage(hlist, LB_RESETCONTENT, 0, 0);
+    EnumWindows(ewproc, 0);
+  }
+}
 
 int APIENTRY WinMain(HINSTANCE hinst, HINSTANCE phinst, LPSTR lpcmdline, int icmdshow)
 {
@@ -58,6 +106,7 @@ int APIENTRY WinMain(HINSTANCE hinst, HINSTANCE phinst, LPSTR lpcmdline, int icm
   }
   SetHook = (BOOL (__stdcall *)(int, int, char))GetProcAddress(module, "SetHook");
   SetDlg = (BOOL (__stdcall *)(HWND))GetProcAddress(module, "SetDlg");
+  SetTgt = (BOOL (__stdcall *)(HWND))GetProcAddress(module, "SetTgt");
   SetSkey = (BOOL (__stdcall *)(char))GetProcAddress(module, "SetSkey");
 
   if(!SetHook || !SetDlg || !SetSkey){
@@ -76,12 +125,18 @@ int APIENTRY WinMain(HINSTANCE hinst, HINSTANCE phinst, LPSTR lpcmdline, int icm
 
 LRESULT CALLBACK DlgProc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
 {
+  // listbox
+  int idx;
+  char infotx[MAX_PATH];
+
   NOTIFYICONDATA tray, ballon;
   static HMENU menu;
   POINT pt;
   int wid;
   char tip[100];
   const UINT WM_TASKBARCREATED = RegisterWindowMessage(TEXT("TaskbarCreated"));
+
+  hlist = GetDlgItem(hdlg, IDC_WLIST);
   // local global
   sprintf_s(tip, 100, "Key: %s\nInterval: %s ms\nSKey: %s", key, itv, skey);
 
@@ -90,6 +145,8 @@ LRESULT CALLBACK DlgProc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
       SetTray(hdlg, &tray);
       break;
     case WM_INITDIALOG:
+      // timer interval: 3s
+      SetTimer(hdlg, MY_TIMER, 2000, 0);
       // send hdlg to dll
       SetDlg(hdlg);
       // save dlg handler
@@ -119,6 +176,7 @@ LRESULT CALLBACK DlgProc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
         SetTip(tip, "Manual", hdlg, &ballon);
       }
 
+      EnumWindows(ewproc, 0);
       SetActiveWindow(hdlg);
       
       return 1;
@@ -130,6 +188,9 @@ LRESULT CALLBACK DlgProc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
       }
       else if(lp==WM_LBUTTONDOWN)
         SendMessage(hdlg, WM_COMMAND, IDC_BUTTON2, lp);
+      break;
+    case WM_TIMER:
+      reflist();
       break;
     case WM_COMMAND:
       wid = LOWORD(wp);
@@ -143,9 +204,12 @@ LRESULT CALLBACK DlgProc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
         SetDlgItemText(hdlg, IDC_EDIT2, itv);
 
         SetHook(0, 0, 0);
-        if(SetHook(1, atoi(itv), vk)){
+        if(tgt && SetHook(1, atoi(itv), vk)){
+          SetTgt(tgt);
           SetSkey(vsk);
           SetTip(tip, "Manual", hdlg, &ballon);
+          GetWindowText(tgt, infotx, sizeof(infotx));
+          SetDlgItemText(hdlg, IDC_LOCK, infotx);
         }
         else SetTip(tip, "Auto", hdlg, &ballon);
       }
@@ -160,6 +224,12 @@ LRESULT CALLBACK DlgProc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp)
           ShowWindow(hdlg, SW_HIDE);
           CheckMenuItem(menu, IDM_TRAY_SET, MF_UNCHECKED);
         }
+      }
+      else if(wid==IDC_WLIST && LBN_SELCHANGE==HIWORD(wp)){
+        idx = (int)SendMessage(hlist, LB_GETCURSEL, 0, 0);
+        tgt = wins[idx];
+        _stprintf(infotx, "wid: 0x%08X", tgt);
+        SetDlgItemText(hdlg, IDC_INFOTX, infotx);
       }
       break;
     case WM_ONOFF:
