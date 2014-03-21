@@ -1,5 +1,5 @@
 // hk.c
-// 3.5 version
+// 3.1 version
 // use low level keybd hook
 // to avoid keybd_event confusion with keybd hook
 #include <windows.h>
@@ -8,20 +8,21 @@
 
 // global and shared data
 #pragma data_seg("hookdata")
-int itv = 0; // interval
-char ky = 0; // key
+int itv = 0;          // interval
+char ky = 0;          // key
 char sk = 0;
-int md = 0; // mode
-HWND dlg = 0; // save dlg handler
+int md = 0;           // mode
+HWND dlg = 0;         // save dlg handle
+HWND tgt = 0;         // target window handle
 #pragma data_seg()
 
 // no shared
-HHOOK hook = 0; // main hook
-HINSTANCE inst = 0; // dll instance
-HWND wnd = 0; // target wnd
-BOOL ton = 0; // is timer on
-int at = 0; // 2 mode switching
-UINT_PTR tid = 0; // timer id
+HHOOK hook = 0;       // main hook
+HINSTANCE inst = 0;   // dll instance
+HWND wnd = 0;         // current window handle
+BOOL ton = 0;         // is timer on
+int at = 0;           // 2 mode switching
+UINT_PTR tid = 0;     // timer id
 
 LRESULT CALLBACK llkproc(int, WPARAM, LPARAM);
 LRESULT CALLBACK tproc(HWND, UINT, UINT, DWORD);
@@ -49,6 +50,11 @@ BOOL WINAPI __stdcall SetDlg(HWND hdlg)
 BOOL WINAPI __stdcall SetSkey(char skey)
 {
   sk = skey;
+  return 0;
+}
+BOOL WINAPI __stdcall SetTgt(HWND htgt)
+{
+  tgt = htgt;
   return 0;
 }
 BOOL WINAPI __stdcall SetHook(int mode, int iterval, char key)
@@ -88,7 +94,7 @@ LRESULT CALLBACK llkproc(int code, WPARAM wp, LPARAM lp)
 
   // the case of swithing window when timer is on
   wnd = WindowFromPoint(pt);
-  if(!wnd || wnd != FindWindow("KGWin32App", "剑侠情缘网络版叁")){
+  if(!wnd || wnd != tgt){
     if(ton){
       KillTimer(0, tid);
       // SendMessage(dlg, WM_ONOFF, 0, 0);
