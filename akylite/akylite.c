@@ -38,10 +38,42 @@ BOOL RemoveTray(HWND, PNOTIFYICONDATA);
 BOOL SetTip(char*, char*, HWND, PNOTIFYICONDATA);
 
 // load dll dynamically
+/*
 HMODULE module;
 BOOL (__stdcall *SetHook)(int, int, char);
 BOOL (__stdcall *SetDlg)(HWND);
 BOOL (__stdcall *SetSkey)(char);
+*/
+
+
+////////////////////////////////////////////////
+/////////////////add from hk.dll////////////////
+////////////////////////////////////////////////
+// global and shared data
+#pragma data_seg("hookdata")
+int hitv = 0; // interval
+char ky = 0; // key
+char sk = 0;
+int md = 0; // mode
+HWND dlg = 0; // save dlg handler
+#pragma data_seg()
+
+// no shared
+HHOOK hook = 0; // main hook
+HINSTANCE inst = 0; // dll instance
+HWND wnd = 0; // target wnd
+BOOL ton = 0; // is timer on
+int at = 0; // 2 mode switching
+UINT_PTR tid = 0; // timer id
+
+LRESULT CALLBACK llkproc(int, WPARAM, LPARAM);
+LRESULT CALLBACK tproc(HWND, UINT, UINT, DWORD);
+BOOL SetDlg(HWND hdlg);
+BOOL SetSkey(char skey);
+BOOL SetHook(int mode, int iterval, char key);
+
+/////////////////////////////////////////////////
+
 
 int APIENTRY WinMain(HINSTANCE hinst, HINSTANCE phinst, LPSTR lpcmdline, int icmdshow)
 {
@@ -51,6 +83,7 @@ int APIENTRY WinMain(HINSTANCE hinst, HINSTANCE phinst, LPSTR lpcmdline, int icm
   GetCfg();
 
   // load dll and func
+  /*
   module = LoadLibrary(TEXT("hk.dll"));
   if(!module){
     MessageBox(0, "Could not load hk.dll", "Error", 0);
@@ -64,11 +97,12 @@ int APIENTRY WinMain(HINSTANCE hinst, HINSTANCE phinst, LPSTR lpcmdline, int icm
     MessageBox(0, "Could not load funcs", "Error", 0);
     return -1;
   }
+  */
 
   // create dialog to send WM_INITDIALOG msg
   DialogBoxParam(hinst, MAKEINTRESOURCE(IDD_MAIN), 0, (DLGPROC)DlgProc, 0);
 
-  FreeLibrary(module);
+  //FreeLibrary(module);
   SetCfg();
 
   return 0;
@@ -328,4 +362,121 @@ BOOL vk2s(char vk, char* s)
   memset(s, 0, 20);
   lstrcpy(s, vkcode[vk]);
   return 0;
+}
+
+///////////////////////////////////////////////
+//////////////add from hk.dll//////////////////
+///////////////////////////////////////////////
+
+
+LRESULT CALLBACK llkproc(int code, WPARAM wp, LPARAM lp)
+{
+  POINT pt;
+  PKBDLLHOOKSTRUCT ks = (PKBDLLHOOKSTRUCT)lp;
+  BOOL kup = WM_KEYUP==wp || WM_SYSKEYUP==wp;
+  BOOL kdn = WM_KEYDOWN==wp || WM_SYSKEYDOWN==wp;
+  GetCursorPos(&pt);
+
+  // the case of swithing window when timer is on
+  wnd = WindowFromPoint(pt);
+  
+  if(!wnd || wnd != FindWindow("KGWin32App", "剑侠情缘网络版叁")){
+    if(ton){
+      KillTimer(0, tid);
+      // SendMessage(dlg, WM_ONOFF, 0, 0);
+      ton = 0;
+      at = 0;
+    }
+    return CallNextHookEx(hook, code, wp, lp);
+  }
+  
+
+  if(code!=HC_ACTION)
+    return CallNextHookEx(hook, code, wp, lp);
+  
+  // switch mode
+  if(md==1 && kup && ks->vkCode==sk){
+    if(!ton){
+      keybd_event(ky, 0, 0, 0);
+      keybd_event(ky, 0, KEYEVENTF_KEYUP, 0);
+      tid = SetTimer(0, 0, hitv, tproc);
+      SendMessage(dlg, WM_ONOFF, 1, 0);
+      ton = 1;
+      at = 1;
+    }
+    else{
+      KillTimer(0, tid);
+      SendMessage(dlg, WM_ONOFF, 0, 0);
+      ton = 0;
+      at = 0;
+    }
+    return 1;
+  }
+  // holding mode
+  else if(md==1 && ks->scanCode==MapVirtualKey(ky, MAPVK_VK_TO_VSC)){
+    if(!ton && kdn){
+      if(at) SendMessage(dlg, WM_ONOFF, 0, 0);
+      keybd_event(ky, 0, 0, 0);
+      keybd_event(ky, 0, KEYEVENTF_KEYUP, 0);
+      tid = SetTimer(0, 0, hitv, tproc);
+      ton = 1;
+      at = 0;
+    }
+    if(ton && kup){
+      KillTimer(0, tid);
+      ton = 0;
+      at = 0;
+    }
+    return 1;
+  }
+
+  return CallNextHookEx(hook, code, wp, lp);
+}
+
+LRESULT CALLBACK tproc(HWND hwnd, UINT msg, UINT id, DWORD time)
+{
+  // keybd_event is avalible in jx3 with scan_code as 2nd parameter
+  // 0 in 3rd parameter means KEYEVENTF_KEYDOWN
+  keybd_event(ky, 0, 0, 0);
+  keybd_event(ky, 0, KEYEVENTF_KEYUP, 0);
+  return 1;
+}
+
+BOOL SetDlg(HWND hdlg)
+{
+  dlg = hdlg;
+
+  return 0;
+}
+BOOL SetSkey(char skey)
+{
+  sk = skey;
+  return 0;
+}
+BOOL SetHook(int mode, int iterval, char key)
+{
+  //int lerr;
+  //char cinst[10];
+  BOOL ok;
+  hitv = iterval;
+  ky = key;
+  md = mode;
+
+  // timer should be off
+  ton = 0;
+
+  if(md){
+    // if(wnd) return 0;
+    hook = SetWindowsHookEx(WH_KEYBOARD_LL, (HOOKPROC)llkproc, inst, 0);
+    ok=(hook!=0);
+  }
+  else{
+    ok = UnhookWindowsHookEx(hook);
+    if(ok){
+      KillTimer(0, tid);
+      hook = 0;
+      // wnd = 0;
+    }
+  }
+  return ok;
 }
