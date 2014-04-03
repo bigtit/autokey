@@ -1,8 +1,0 @@
-LIBRARY hk
-
-EXPORTS
-	SetHook
-	SetDlg
-	SetSkey
-SECTIONS
-	hookdata READ WRITE SHARED
