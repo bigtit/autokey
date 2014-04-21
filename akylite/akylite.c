@@ -470,13 +470,10 @@ BOOL SetHook(int mode, int iterval, char key)
     hook = SetWindowsHookEx(WH_KEYBOARD_LL, (HOOKPROC)llkproc, inst, 0);
     ok=(hook!=0);
   }
-  else{
-    ok = UnhookWindowsHookEx(hook);
-    if(ok){
-      KillTimer(0, tid);
-      hook = 0;
-      // wnd = 0;
-    }
+  else if(ok = UnhookWindowsHookEx(hook)){
+    KillTimer(0, tid);
+    hook = 0;
+    // wnd = 0;
   }
   return ok;
 }
