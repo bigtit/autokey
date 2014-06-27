@@ -380,7 +380,9 @@ LRESULT CALLBACK llkproc(int code, WPARAM wp, LPARAM lp)
   // the case of swithing window when timer is on
   wnd = WindowFromPoint(pt);
   
-  if(!wnd || wnd != FindWindow("KGWin32App", "剑侠情缘网络版叁")){
+  // cas window title always changes
+  // we find window by win_type only
+  if(!wnd || wnd != FindWindow("KGWin32App", 0)){
     if(ton){
       KillTimer(0, tid);
       // SendMessage(dlg, WM_ONOFF, 0, 0);
