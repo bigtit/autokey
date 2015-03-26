@@ -281,11 +281,11 @@ LRESULT CALLBACK llk_proc(int code, WPARAM wp, LPARAM lp){
   GetCursorPos(&pt);
 
   fcs_wnd = WindowFromPoint(pt);
-  //if(!fcs_wnd || fcs_wnd!=FindWindow("Edit", 0)){
-  if(!fcs_wnd || fcs_wnd==g_hdlg || fcs_wnd==text1 ||
+  if(!fcs_wnd || fcs_wnd!=FindWindow("KGWin32App", 0)){
+  /*if(!fcs_wnd || fcs_wnd==g_hdlg || fcs_wnd==text1 ||
       fcs_wnd==text2 || fcs_wnd==text3 || 
       fcs_wnd==GetDlgItem(g_hdlg, IDC_BUTTON1) ||
-      fcs_wnd==GetDlgItem(g_hdlg, IDC_BUTTON2)){
+      fcs_wnd==GetDlgItem(g_hdlg, IDC_BUTTON2)){*/
     if(timer0){
       KillTimer(0, timer0);
       timer0 = 0;
