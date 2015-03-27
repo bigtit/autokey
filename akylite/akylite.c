@@ -294,8 +294,8 @@ LRESULT CALLBACK llk_proc(int code, WPARAM wp, LPARAM lp){
   }
   if(code!=HC_ACTION)
     return CallNextHookEx(g_hook, code, wp, lp);
-  if(ks->vkCode==VK_LWIN){
-    CallNextHookEx(g_hook, code, wp, lp);
+  if(ks->vkCode==VK_LWIN){ // disable left winkey in game window
+    //CallNextHookEx(g_hook, code, wp, lp);
     return 1;
   }
   if(kup && ks->vkCode==g_vsk){ // switch key pressed
