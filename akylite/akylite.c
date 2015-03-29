@@ -21,7 +21,7 @@ HWND text1;
 HWND text2;
 HWND text3;
 
-// shared hook data
+// shared hook dataset
 #pragma data_seg("hookdata")
 int g_itv;
 char g_vk;
@@ -101,8 +101,8 @@ LRESULT CALLBACK dlg_proc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp){
         GWL_WNDPROC, (LONG)edit3_proc);
 
       // start hook
-      if(sethk(g_itv, g_vk, g_vsk))
-        set_tip(hdlg, &ballon, "Hook started", tip);
+      if(sethk(g_itv, g_vk, g_vsk)) set_tip(g_hdlg, &ballon, "Hook set", tip);
+      else set_tip(g_hdlg, &ballon, "Error", "Identical key&skey");
       SetActiveWindow(hdlg);
       return 1;
     case WM_TRAY:
@@ -122,8 +122,8 @@ LRESULT CALLBACK dlg_proc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp){
         sprintf_s(tip, 100, "Key: %d\nInterval: %d ms\nSKey: %d", g_vk, g_itv, g_vsk);
         
         // no need to restart hook anymore
-        if(sethk(g_itv, g_vk, g_vsk))
-          set_tip(hdlg, &ballon, "Hook set", tip);
+        if(sethk(g_itv, g_vk, g_vsk)) set_tip(g_hdlg, &ballon, "Hook set", tip);
+        else set_tip(g_hdlg, &ballon, "Error", "Identical key&skey");
       }else if(wid==IDM_TRAY_EXT) SendMessage(hdlg, WM_CLOSE, wp, lp);
       else if(wid==IDM_TRAY_ABO) set_tip(hdlg, &ballon, "About", "20150321\nTsubasa9\nVersion 3.0 lite");
       else if(wid==IDM_TRAY_SET || wid==IDC_BUTTON2){
@@ -331,11 +331,7 @@ LRESULT CALLBACK timer_proc(HWND hwnd, UINT msg, UINT id, DWORD time){
 }
 
 BOOL sethk(int itv, char vk, char vsk){
-  if(vk==vsk){
-    NOTIFYICONDATA ballon;
-    set_tip(g_hdlg, &ballon, "Error", "Identical key&skey");
-    return 0;
-  }
+  if(vk==vsk) return 0;
   g_itv = itv;
   g_vk = vk;
   g_vsk = vsk;
