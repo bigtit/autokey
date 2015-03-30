@@ -14,3 +14,5 @@ Skey for auto pressing & holding switching.
 
 ######Todo:
 A list of windows which user could choose from a window handler for auto keying specifically.
+Multi-keying.
+Send keys to inactive/background window, not bothering other windows into which user is now inputing contents.
