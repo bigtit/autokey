@@ -30,6 +30,15 @@ HHOOK g_hook = 0;
 UINT_PTR timer0 = 0;
 #pragma data_seg()
 
+// ugly globals
+NOTIFYICONDATA tray, ballon;
+static HMENU menu;
+POINT pt;
+int wid;
+char tip[100];
+char buf[16];
+const UINT WM_TASKBARCREATED = RegisterWindowMessage(TEXT("TaskbarCreated"));
+
 // funcs
 BOOL read_cfg();
 BOOL write_cfg();
@@ -62,19 +71,13 @@ int APIENTRY WinMain(HINSTANCE hinst, HINSTANCE pre_hinst, LPSTR lpcmd, int icmd
 }
 
 LRESULT CALLBACK dlg_proc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp){
-  NOTIFYICONDATA tray, ballon;
-  static HMENU menu;
-  POINT pt;
-  int wid;
-  char tip[100];
-  char buf[16];
-  const UINT WM_TASKBARCREATED = RegisterWindowMessage(TEXT("TaskbarCreated"));
-  sprintf_s(tip, 100, "Key: %d\nInterval: %d ms\nSKey: %d", g_vk, g_itv, g_vsk);
+  // never put var declaration/assignment before switch of wndproc
   switch(msg){
     case WM_CREATE:
       set_tray(hdlg, &tray);
       break;
     case WM_INITDIALOG:
+      sprintf_s(tip, 100, "Key: %d\nInterval: %d ms\nSKey: %d", g_vk, g_itv, g_vsk);
       g_hdlg = hdlg;
       set_tray(hdlg, &tray);
       menu = LoadMenu(g_hinst, MAKEINTRESOURCE(IDC_TRAY));
