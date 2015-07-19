@@ -17,10 +17,6 @@ HWND g_hdlg;
 WNDPROC edit1p;
 WNDPROC edit3p;
 
-HWND text1;
-HWND text2;
-HWND text3;
-
 // shared hook dataset
 #pragma data_seg("hookdata")
 int g_itv;
@@ -37,7 +33,6 @@ POINT pt;
 int wid;
 char tip[100];
 char buf[16];
-const UINT WM_TASKBARCREATED = RegisterWindowMessage(TEXT("TaskbarCreated"));
 
 // funcs
 BOOL read_cfg();
@@ -94,13 +89,9 @@ LRESULT CALLBACK dlg_proc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp){
       SendDlgItemMessage(hdlg, IDC_EDIT2, EM_LIMITTEXT, 4, 0);
       SendDlgItemMessage(hdlg, IDC_EDIT3, EM_LIMITTEXT, 1, 0);
 
-      text1 = GetDlgItem(hdlg, IDC_EDIT1);
-      text2 = GetDlgItem(hdlg, IDC_EDIT2);
-      text3 = GetDlgItem(hdlg, IDC_EDIT3);
-
-      edit1p = (WNDPROC)SetWindowLong(text1, 
+      edit1p = (WNDPROC)SetWindowLong(GetDlgItem(hdlg, IDC_EDIT1), 
         GWL_WNDPROC, (LONG)edit1_proc);
-      edit3p = (WNDPROC)SetWindowLong(text3, 
+      edit3p = (WNDPROC)SetWindowLong(GetDlgItem(hdlg, IDC_EDIT3), 
         GWL_WNDPROC, (LONG)edit3_proc);
 
       // start hook
@@ -158,7 +149,7 @@ LRESULT CALLBACK dlg_proc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp){
       EndDialog(hdlg, 0);
       break;
     default:
-      if(msg==WM_TASKBARCREATED)
+      if(msg==RegisterWindowMessage(TEXT("TaskbarCreated")))
         SendMessage(hdlg, WM_CREATE, wp, lp);
       break;
   }
@@ -181,8 +172,10 @@ BOOL read_cfg(){
   if(g_itv>9999 || g_itv<1) g_itv = 400;
   if(g_vk<8 || g_vk >254) g_vk = 87;
   if(g_vsk<8 || g_vsk >254) g_vsk = 123;
-  if(g_vk==g_vsk) g_vsk = g_vk+1;
-
+  if(g_vk==g_vsk){
+    g_vk = 87;
+    g_vsk = 123;
+  }
   return 1;
 }
 
