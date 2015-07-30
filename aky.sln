@@ -1,7 +1,8 @@
-
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual C++ Express 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "akylite", "akylite\akylite.vcproj", "{2ED3AD45-FB83-4AD0-A204-340A62C68778}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "akylite", "akylite\akylite.vcxproj", "{2ED3AD45-FB83-4AD0-A204-340A62C68778}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

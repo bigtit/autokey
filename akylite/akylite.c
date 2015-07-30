@@ -6,7 +6,6 @@
 #include "resource.h"
 
 #define WM_TRAY WM_USER+1
-#define WM_SWCH WM_USER+2
 #define WM_EDIT WM_USER+3
 
 // compact revision from original akylite.c
@@ -130,10 +129,6 @@ LRESULT CALLBACK dlg_proc(HWND hdlg, UINT msg, WPARAM wp, LPARAM lp){
           CheckMenuItem(menu, IDM_TRAY_SET, MF_UNCHECKED);
         }
       }
-      break;
-    case WM_SWCH:
-      if(!wp) set_tip(hdlg, &ballon, "Auto off", tip);
-      else set_tip(hdlg, &ballon, "Auto on", tip);
       break;
     case WM_EDIT:
       if(!wp){
@@ -299,18 +294,15 @@ LRESULT CALLBACK llk_proc(int code, WPARAM wp, LPARAM lp){
       keybd_event(g_vk, 0, 0, 0);
       keybd_event(g_vk, 0, KEYEVENTF_KEYUP, 0);
       timer0 = SetTimer(0, 0, g_itv, timer_proc);
-      SendMessage(g_hdlg, WM_SWCH, 1, 0); // show tip
     }else{
       KillTimer(0, timer0);
       timer0 = 0;
-      SendMessage(g_hdlg, WM_SWCH, 0, 0); // show tip
     }
   }else if(ks->scanCode==MapVirtualKey(g_vk, MAPVK_VK_TO_VSC)){ // holding key pressed
     if(!timer0 && kdn){
       keybd_event(g_vk, 0, 0, 0);
       keybd_event(g_vk, 0, KEYEVENTF_KEYUP, 0);
       timer0 = SetTimer(0, 0, g_itv, timer_proc);
-      SendMessage(g_hdlg, WM_SWCH, 0, 0);
     }else if(timer0 && kup){
       KillTimer(0, timer0);
       timer0 = 0;
